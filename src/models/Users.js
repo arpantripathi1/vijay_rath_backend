@@ -20,6 +20,21 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  fetchCount: { // Add this line
+    type: Number,
+    default: 0,
+  },
+  emailFetchIndex: {
+    type: Number,
+    default: 0,
+  },
+  contactFetchIndex: {
+    type: Number,
+    default: 0,
+  },
+  lastFetchDate: {
+    type: Date,
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 });

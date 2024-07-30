@@ -1,11 +1,15 @@
 require('dotenv').config();
 const express = require('express');
+const Razorpay = require('razorpay');
 
 const cors = require('cors');
 const helmet = require('helmet');
 const connectDB = require('./src/config/db');
-const userRoutes = require('./src/routes/users');
-const authRoutes = require('./src/routes/auth');
+const userRoutes = require('./src/routes/userRoutes');
+const authRoutes = require('./src/routes/authRoutes');
+const orderRoutes = require('./src/routes/orderRoutes'); 
+const dataRoutes = require('./src/routes/dataRoutes');
+
 
 const app = express();
 
@@ -28,6 +32,19 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 
     // Use user routes
     app.use('/users', userRoutes);
+
+    // use payment routes
+    app.use('/orders', orderRoutes); // New
+
+    //fetch mails and contacts
+    app.use('/contacts', dataRoutes); // Prefix API endpoints with '/api'
+
+    // In your Express app
+    app.get('/config/razorpay', (req, res) => {
+      console.log("/config/razorpay is hit to send razorpay api key");
+      console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID); // Debugging line
+      res.send({ key: process.env.RAZORPAY_KEY_ID });
+    });
 
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
