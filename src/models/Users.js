@@ -20,6 +20,21 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  fetchCount: { // Add this line
+    type: Number,
+    default: 0,
+  },
+  emailFetchIndex: {
+    type: Number,
+    default: 0,
+  },
+  contactFetchIndex: {
+    type: Number,
+    default: 0,
+  },
+  lastFetchDate: {
+    type: Date,
+  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 });
@@ -42,19 +57,19 @@ const userSchema = new mongoose.Schema({
 
 
 //new code
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// userSchema.pre('save', async function (next) {
+//   if (!this.isModified('password')) {
+//     return next();
+//   }
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
-userSchema.methods.generatePasswordReset = function () {
-  this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
-  this.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
-};
+// userSchema.methods.generatePasswordReset = function () {
+//   this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+//   this.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+// };
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

@@ -31,13 +31,13 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: process.env.EMAIL_USER,
+    user: process.env.EMAIL,
     pass: process.env.EMAIL_PASS,
   },
 });
 
 exports.sendResetEmail = async (email, token) => {
-  const resetUrl = `http://yourdomain.com/reset-password?token=${token}`;
+  const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
   const message = `You are receiving this email because you (or someone else) have requested the reset of a password.\n\n
   Please click on the following link, or paste this into your browser to complete the process:\n\n
   ${resetUrl}\n\n
@@ -45,7 +45,7 @@ exports.sendResetEmail = async (email, token) => {
 
   await transporter.sendMail({
     to: email,
-    from: process.env.EMAIL_FROM,
+    from: process.env.EMAIL,
     subject: 'Password reset',
     text: message,
   });
